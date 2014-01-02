@@ -37,7 +37,7 @@ var Router = Backbone.Router.extend({
 
     */
     save: function () {
-        alert("SAVE!");
+        // alert("SAVE!");
     },
     update: function () {
 
@@ -63,10 +63,5 @@ var Router = Backbone.Router.extend({
 })
 
 var router = new Router();
-
-setTimeout(function () {
-    router.navigate('save', { trigger: true });
-    // router.trigger("route:save");
-}, 1000 * 3);
 
 Backbone.history.start();
