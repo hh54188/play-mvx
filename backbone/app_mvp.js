@@ -11,66 +11,56 @@ var Todos = Backbone.Collection.extend({
     model: Todo
 });
 
-var ListView = Backbone.View.extend({
-    // Render option
-    el: $("#list"),
+var ItemView = Backbone.View.extend({
+    tagName: "li",
     template: _.template($("#item-template").html()),
-    _render: function (data) {
-        var renderResult = this.template(data);
-        return renderResult;
-    },    
-    // Event bind
+    render: function () {
+        this.$el.html(this.template(this.model.toJSON()));
+        return this;
+    },
     events: {
-        "click .delete": "_removeItemView"
+        "click .delete": "_clear"
     },
-    _removeItemView: function () {
-        $(document).trigger("remove.backbone");
-    },
-    // Public API
-    createItemView: function (data) {
-        var view = this._render(data);
-        this.$el.append(view);
-    },
-    removeItemView: function () {
-
+    _clear: function () {
+        this.$el.trigger("delete", this);
     }
 });
 
-var todos = new Todos();
-var list = new ListView();
+var AppView = Backbone.View.extend({
+    el: $("body"),
+    events: {
+        "click #create": "_create"
+    },
+    _create: function () {
+        var model = {
+            title: this.$("#input").val()
+        };
+
+        this.$el.trigger("create", model);
+    }   
+})
 
 var Presenter = Backbone.View.extend({
-    el: $(document),
-    bindEvent: function () {
+    el: $("body"),
+    initialize: function () {
 
-        this.$el.on("remove.backbone", function () {
-            alert("REMOVE");
+        this.appView = new AppView;
+        this.todos = new Todos;
+        var _this = this;
+
+        this.$el.on("create", function (e, model) {
+            _this.todos.add(model);
+            var itemView = new ItemView({
+                model: model
+            })
+            _this.$("#list").append(itemView.render().el);
         });
 
-        this.$el.on("create.backbone", function (e, customData) {
-            var data = {
-                title: customData.title
-            }
-            // todos.create(data);
-            // todos.add(data);
-            // list.createItemView(data);
-        })
-    },
-    initialize: function () {
-        this.bindEvent();
+        this.$el.on("delete", function (e, view) {
+            _this.todos.remove(view.model);
+            view.remove();
+        });        
     }
-});
-
-
-
-// Bootstrap
-var p = new Presenter();
-
-
-$("#create").click(function () {
-    var title = $("#title").val();
-    if (!title) return;
-    $(document).trigger("create.backbone", {
-        title: title
-    });
 })
+
+var p = new Presenter;
