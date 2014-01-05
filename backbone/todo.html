@@ -12,14 +12,14 @@
     </style>
 </head>
 <body>
-    <textarea id="title"></textarea>
+    <input type="text" id="input">
     <button id="create">Add</button>
     <ul id="list"></ul>
 
     <script type="text/template" id="item-template">
-        <p><%= title %></p>
-        <span class="delete">delete</span>
+        <span><%= title %></span>
+        <button class="delete">delete</button>
     </script>
-    <script type="text/javascript" src="app.js"></script>
+    <script type="text/javascript" src="app_ob.js"></script>
 </body>
 </html>

@@ -14,7 +14,6 @@ var Todos = Backbone.Collection.extend({
 var ListView = Backbone.View.extend({
     // Render option
     el: $("#list"),
-    tagName: "li",
     template: _.template($("#item-template").html()),
     _render: function (data) {
         var renderResult = this.template(data);
@@ -52,8 +51,9 @@ var Presenter = Backbone.View.extend({
             var data = {
                 title: customData.title
             }
-            todos.add(data);
-            list.createItemView(data);
+            // todos.create(data);
+            // todos.add(data);
+            // list.createItemView(data);
         })
     },
     initialize: function () {
