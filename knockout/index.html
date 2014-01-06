@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <script type="text/javascript" src="lib/knockout-3.0.0.js"></script>
+</head>
+<body>
+    <input type="text" data-bind="value: title">
+    <button data-bind="click: create">Add</button>
+    <ul data-bind="foreach: todos">
+        <li>
+            <span data-bind="text: title"> </span>
+            <button data-bind="click: $root.remove">delete</button>
+        </li>
+    </ul>
+
+    <script type="text/javascript" src="app.js"></script>
+</body>
+</html>
