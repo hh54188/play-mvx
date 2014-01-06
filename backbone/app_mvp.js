@@ -14,9 +14,9 @@ var Todos = Backbone.Collection.extend({
 var ItemView = Backbone.View.extend({
     tagName: "li",
     template: _.template($("#item-template").html()),
-    render: function () {
+    render: function (container) {
         this.$el.html(this.template(this.model.toJSON()));
-        return this;
+        container.append(this.$el);
     },
     events: {
         "click .delete": "_clear"
@@ -32,11 +32,11 @@ var AppView = Backbone.View.extend({
         "click #create": "_create"
     },
     _create: function () {
-        var model = {
+        var data = {
             title: this.$("#input").val()
         };
 
-        this.$el.trigger("create", model);
+        this.$el.trigger("create", data);
     }   
 })
 
@@ -44,16 +44,19 @@ var Presenter = Backbone.View.extend({
     el: $("body"),
     initialize: function () {
 
-        this.appView = new AppView;
+        this.appView = new AppView({
+            container: $("#list")
+        });
         this.todos = new Todos;
         var _this = this;
 
-        this.$el.on("create", function (e, model) {
+        this.$el.on("create", function (e, attrs) {
+            var model = new Todo(attrs);
             _this.todos.add(model);
             var itemView = new ItemView({
                 model: model
             })
-            _this.$("#list").append(itemView.render().el);
+            itemView.render($("#list"));
         });
 
         this.$el.on("delete", function (e, view) {
