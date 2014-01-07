@@ -7,10 +7,13 @@ var ViewModel = function() {
     
     var _this = this;
     this.todos = ko.observableArray([new Todo("test1"), new Todo("test2")]);
+    this.title = ko.observable();
 
     this.create = function () {
-        // _this.todos.push(new Todo(_this.title));
-        console.log(title);
+        var title = this.title().trim();
+        if (title) {
+            _this.todos.push(new Todo(title));
+        }
     }
 
     this.remove = function (todo) {
