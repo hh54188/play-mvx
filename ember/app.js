@@ -1,17 +1,16 @@
 App = Ember.Application.create({});
 
-// App.ApplicationAdapter = DS.FixtureAdapter;
-
-// App.Todo = Ember.Object.extend({
-//     title: ""
-// });
-
 App.ApplicationAdapter = DS.LSAdapter.extend();
 
 App.Todo = DS.Model.extend({
 	title: DS.attr("string")
 })
 
+/*
+	The goal of routes is to query the model, from their model hook, 
+	to make it available in the controller and in the template. 
+	Routes can also be used to set properties in controllers,
+*/
 App.IndexRoute = Ember.Route.extend({
     setupController: function(controller) {
     	var todos = this.store.find('todo');
@@ -19,6 +18,7 @@ App.IndexRoute = Ember.Route.extend({
     }
 });
 
+// At first, a controller gets a model from a route. T
 App.TodoController = Ember.ObjectController.extend({
 	actions: {
 		remove: function () {
@@ -43,4 +43,4 @@ App.IndexController = Ember.ArrayController.extend({
 			todo.save();
 		}
 	}
-})
+});
