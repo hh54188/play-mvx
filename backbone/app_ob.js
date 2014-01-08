@@ -21,7 +21,7 @@ var ItemView = Backbone.View.extend({
         return this;
     },
     initialize: function () {
-        this.listenTo(todos, 'remove', this.remove);
+        this.listenTo(this.model, 'remove', this.remove);
     },
     events: {
         "click .delete": "clear"
@@ -35,7 +35,7 @@ var AppView = Backbone.View.extend({
     el: $("body"),
     initialize: function () {
         this.listenTo(todos, 'add', this.addOne);
-    },
+    },  
     addOne: function(todo) {
         var view = new ItemView({
             model: todo
@@ -46,9 +46,10 @@ var AppView = Backbone.View.extend({
         "click #create": "create"
     },
     create: function () {
-        todos.add({
+        var model = new Todo({
             title: this.$("#input").val()
         });
+        todos.add(model);
     }
 })
 
